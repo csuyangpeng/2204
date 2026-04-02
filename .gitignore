@@ -1,0 +1,27 @@
+#
+#Build
+buld/
+*.exe
+*.mod
+*.sum
+
+# venv
+/vendor/
+
+# Log
+*.log
+*.log.gz
+
+# VSCode settings
+.vscode
+
+# IDEA files
+.idea
+
+# OSX dir files
+.DS_Store
+
+# Sublime Text settings
+*.sublime-workspace
+*.sublime-project
+

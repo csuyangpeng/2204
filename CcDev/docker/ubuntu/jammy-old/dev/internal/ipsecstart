@@ -1,0 +1,25 @@
+#! /bin/bash
+cd "$(dirname "${BASH_SOURCE[0]}")/"
+
+export PATH=$PATH:/usr/local/ipsec/install/sbin
+
+dt=`date "+%Y-%m-%d %H:%M:%S"`
+
+#check ipsec
+function restart_ipsec_if_die(){
+        procnum=`ps -ef |grep "libexec/ipsec" |grep -v grep|wc -l`
+        if [ $procnum -eq 0 ]
+        then
+        {
+                ipsec start
+                echo "ipsec start at (time:$dt)"
+        }
+        fi
+}
+
+#start ipsec
+while true
+do
+        restart_ipsec_if_die
+        sleep 3
+done

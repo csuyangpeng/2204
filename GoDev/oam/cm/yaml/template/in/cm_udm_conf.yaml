@@ -1,0 +1,26 @@
+udminstanceid: ""
+version:
+  main: ""
+  patch: ""
+logger:
+  level: ""
+  path: ""
+  control: false
+sbi:
+  amf:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+  udm:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+  smf:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+plmnlist:
+  list: []

@@ -1,0 +1,69 @@
+version:
+  main: ""
+  patch: ""
+logger:
+  level: ""
+  path: ""
+  control: 0
+service:
+  ssc mode: ""
+  pdu session type: ""
+dnn info:
+- name: ""
+  ip: ""
+  ip range: ""
+upf selection:
+- dnn name: ""
+  snssai: ""
+  upf ip: ""
+n4:
+  ip: ""
+  port: 0
+bar:
+  downlink data notification delay(ms): 0
+  suggestion buffer packets count: 0
+qos rules:
+- rule id: 0
+  operation code: ""
+  is default rule: false
+  precedence: 0
+  qfi: 0
+  segregation: false
+  packet filter list:
+  - packet filter id: 0
+    direction: ""
+    descriptions:
+    - ""
+flow descriptions:
+- qfi: 0
+  operation code: ""
+  e: false
+  parameter list:
+  - parameters id: 0
+    fiveqi: 0
+    gfbr uplink: ""
+    gfbr downlink: ""
+    mfbr uplink: ""
+    mfbr downlink: ""
+    averaging window(ms): 0
+sbi:
+  amf:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+  udm:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+  smf:
+    addr:
+      ip: ""
+      port: 0
+    scheme: ""
+timer:
+  t3590 sec: 0
+  t3591 sec: 0
+  t3592 sec: 0
+  t3593 sec: 0

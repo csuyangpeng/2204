@@ -1,0 +1,30 @@
+version:
+  main: "0.1"
+  patch: "0"
+
+logger:
+  level: "debug"
+  path: "logs/udm.log"
+  control: 1 # 0 - stdout, 1 - file
+
+plmn list:
+  - "46000"
+  - "46001"
+
+sbi:
+  udm:
+    addr:
+      ip: "10.18.1.56"
+      port: 29503
+    scheme: "http"
+  amf:
+    addr:
+      ip: "192.168.3.5"
+      port: 29518
+    scheme: "http"
+  smf:
+    addr:
+      ip: "192.168.3.5"
+      port: 29502
+    scheme: "http"
+

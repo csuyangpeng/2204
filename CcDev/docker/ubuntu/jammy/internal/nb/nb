@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#nb command's path:
+NB=`which nb`
+export  MAKEFILE=${NB%nb}gnumk/makefile
+echo MAKEFILE=${MAKEFILE}
+MAKECMD="make -f ${MAKEFILE} $@"
+
+echo nb comand  is ${NB}, makefile is  ${MAKEFILE}.
+
+if  [ "$1" == "help" ]  || [ "$1" == "clean" ] || [  "$1" == "subclean" ]; then
+  #not compiling command:
+  echo INFO:Command is  ${MAKECMD}
+  #${MAKECMD}  
+else
+  echo INFO:compiling  command is:$0 ${args}
+  #execute compiling command:
+  ${MAKECMD}  
+fi
+

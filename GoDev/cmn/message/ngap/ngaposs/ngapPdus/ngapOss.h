@@ -1,0 +1,40 @@
+#ifndef __ngapOss_h__INCLUDED__
+#define __ngapOss_h__INCLUDED__
+
+#include <ngapToed_x86.h>
+
+typedef struct NGSetupRequest::_seqof225 NGSetupRequestIe;
+typedef struct NGSetupResponse::_seqof226 NGSetupResponseIe;
+typedef struct NGReset::_seqof235 NGResetIe;
+typedef struct NGResetAcknowledge::_seqof236 NGResetAckIe;
+typedef struct _seqof227_ NGSetupFailureIe;
+typedef struct InitialUEMessage::_seqof220 InitialUEMessageIe;
+typedef struct DownlinkNASTransport::_seqof221 DownlinkNASTransportIe;
+typedef struct UplinkNASTransport::_seqof222 UplinkNASTransportIe;
+typedef struct PDUSessionResourceSetupRequest::_seqof186 PDUSessResSetupReqIe;
+typedef struct PDUSessionResourceSetupRequestTransfer::_seqof124 PduSessResSetupReqTransferIe;
+typedef struct PDUSessionResourceSetupRequest::_seqof186::_seq234 PDUSessResSetupReqIeValue;
+typedef struct PDUSessionResourceSetupResponse::_seqof187 PDUSessResSetupRespIe;
+typedef struct PDUSessionResourceModifyRequest::_seqof190 PduSessResMdfyReqIe;
+typedef struct PDUSessionResourceModifyResponse::_seqof191 PduSessResMdfyRespIe;
+typedef struct PDUSessionResourceModifyRequestTransfer::_seqof100 PduSessResModifyReqTransferIe;
+typedef struct PDUSessionResourceModifyRequestTransfer::_seqof100::_seq124 PduSessResModifyReqTransferIeValue;
+typedef struct InitialContextSetupRequest::_seqof195 InitialContextSetupRequestIe;
+typedef struct InitialContextSetupResponse::_seqof196 InitialContextSetupResponseIe;
+typedef struct InitialContextSetupFailure::_seqof197 InitialContextSetupFailureIe;
+typedef struct UEContextReleaseRequest::_seqof198 UEContextReleaseRequestIe;
+typedef struct UEContextReleaseCommand::_seqof199 UEContextReleaseCommandIe;
+typedef struct UEContextReleaseComplete::_seqof200 UEContextReleaseCompleteIe;
+typedef struct PDUSessionResourceReleaseCommand::_seqof188 PduSessResRelCmdIe;
+typedef struct UERadioCapabilityInfoIndication::_seqof260  UeRadioCapaInfoIndicationIe;
+typedef struct PDUSessionResourceReleaseResponse::_seqof189 PduSessResRelRespIe;
+typedef struct _seqof110_ PduSessResRelRespTransferIe;
+typedef struct _seqof203_ ErrorIndicationIe;
+typedef struct Paging::_seqof219 PagingIe;
+typedef struct PDUSessionResourceModifyItemModReq::_seqof106 SnssaiIeValue;
+typedef struct SecurityIndication::_seqof79 SecurityIndicationIeExtension;
+typedef struct _seqof181_ UserLocationInfomationNRIeExtension;
+typedef struct PDUSessionResourceItemCxtRelCpl::_seqof95 PduSessResItemRelCplIeExtension;
+typedef struct NASNonDeliveryIndication::_seqof223 NasNonDeliveryIndicationIe;
+
+#endif // __ngapOss_h__INCLUDED__

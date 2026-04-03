@@ -1,0 +1,29 @@
+variables:
+  GIT_STRATEGY: fetch
+  GIT_DEPTH: 5
+
+stages:
+  - staticanalyze
+  - build
+  - test
+
+before_script:
+  - echo "before_script"
+
+go_fmt:
+  stage: staticanalyze
+  before_script:
+    - echo "start go_fmt job in staticanalyze"
+  after_script:
+    - echo "end go_fmt job in staticanalyze"
+  script:
+    #- time=$(date "+_%m_%d_%H_%M")
+    #- echo $date
+    - find . -name "*.go" | xargs gofmt -d
+    - find . -name "*.go" | xargs gofmt -w
+    - case `git status` in *"nothing to commit, working directory clean"*) exit 0;; esac
+    - git checkout .
+    - exit 1
+
+after_script:
+  - echo "after_script"

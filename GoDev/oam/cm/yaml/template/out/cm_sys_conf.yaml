@@ -1,0 +1,12 @@
+n2sctpparam:
+  initmsg:
+    numostreams: 0
+    maxinstreams: 0
+    maxattempts: 0
+    maxinittimeout: 0
+  sctpheatbeat:
+    heatbeatinterval: 0
+    pathmaxrxt: 0
+sc:
+  numofamfscinst: 0
+  numofsmfscinst: 0

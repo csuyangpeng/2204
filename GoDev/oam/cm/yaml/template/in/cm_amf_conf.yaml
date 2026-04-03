@@ -1,0 +1,27 @@
+n2:
+  ipv4: ""
+  port: 0
+service:
+  amfinstanceid: ""
+  amfname: ""
+  amfrelcap: 0
+  amfidentifer:
+    amfregionid: 0
+    amfsetid:
+    - 0
+    - 0
+    amfpointer: 0
+nas:
+  secenabled: false
+  encalgo: ""
+  intalgo: ""
+  t3512min: 0
+  t3513sec: 0
+  t3502min: 0
+  t3550sec: 0
+  t3560sec: 0
+  t3570sec: 0
+  t3522sec: 0
+  t3555sec: 0
+  t3565sec: 0
+  ticssec: 0

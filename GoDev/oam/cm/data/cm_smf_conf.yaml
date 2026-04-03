@@ -1,0 +1,84 @@
+version:
+  main: "0.1"
+  patch: "1"
+logger:
+  level: "debug"
+  path: "logs/smf.log"
+  control: 1 # 0 - stdout, 1 - file
+service:
+  ssc mode: "ssc mode 1" # ssc mode1, ssc mode 2, ssc mode 3
+  pdu session type: "ipv4" # ipv4, ipv6, ipv4v6, ethernet, unstructured
+dnn info:
+  - name: "cmnet.com"
+    ip: "192.168.2.200"
+    ip range: "10.55.0.2/16"
+upf selection:
+  - dnn name: "cmnet.com"
+    snssai: "1-1"
+    upf ip: "10.18.1.52"
+n4:
+  ip: "10.18.1.52"
+  port: 8806
+bar:
+  downlink data notification delay(ms): 0
+  suggestion buffer packets count: 255
+qos rules:
+  - rule id: 1
+    operation code: "create new qos rule"
+    # create new qos rule
+    # delete existing qos rule
+    # modify existing qos rule and add packet filters
+    # modify existing qos rule and replace all packet filters
+    # modify existing qos rule and delete packet filters
+    # modify existing qos rule without modifying packet filters
+    is default rule: false
+    precedence: 0
+    qfi: 1 # 0~63
+    segregation: false
+    packet filter list:
+      - packet filter id: 1
+        direction: "bidirectional" # uplink, downlink, bidirectional
+        descriptions:
+          - "permit out ip from any to assigned"
+flow descriptions:
+  - qfi: 1 # 0~63
+    operation code: "create new qos flow description"
+    # create new qos flow description,
+    # delete existing qos flow description,
+    # modify existing qos flow description
+    e: false
+    parameter list:
+      - parameters id: "5qi"
+        fiveqi: 9 #1,2,3,4,5,6,7,8,9,65,66,67,69,70,75,79,80,82,83,84,85
+      - parameters id: "GFBR uplink"
+        gfbr uplink: "200 Mbps" # Kbps/Mbps/Gbps/Tbps/Pbps
+      - parameters id: "GFBR downlink"
+        gfbr downlink: "200 Mbps"
+      - parameters id: "MFBR uplink"
+        mfbr uplink: "200 Mbps"
+      - parameters id: "MFBR downlink"
+        mfbr downlink: "200 Mbps"
+      - parameters id: "averaging window"
+        averaging window(ms): 100
+
+sbi:
+  amf:
+    addr:
+      ip: "10.18.1.52"
+      port: 29518
+    scheme: "http"
+  udm:
+    addr:
+      ip: "10.18.1.52"
+      port: 29503
+    scheme: "http"
+  smf:
+    addr:
+      ip: "10.18.1.52"
+      port: 29502
+    scheme: "http"
+timer:
+  t3590 sec: 15
+  t3591 sec: 16
+  t3592 sec: 16
+  t3593 sec: 60

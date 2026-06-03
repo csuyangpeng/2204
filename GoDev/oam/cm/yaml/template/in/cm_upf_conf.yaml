@@ -1,0 +1,44 @@
+version:
+  main: ""
+  patch: ""
+logger:
+  level: ""
+  path: ""
+  control: false
+n3:
+  port id: 0
+  ipv4: 192.168.4.22
+  mask: ""
+n4:
+  local:
+    ipv4: 192.168.4.40
+    port: 8805
+  smf:
+    ipv4: 192.168.4.8
+    port: 8805
+n6:
+  port id: 0
+  ipv4: ""
+  mask: ""
+nff:
+  dpdk args: --log-level=7
+  cpu list: ""
+  stats server nostats: false
+  stats server address: ""
+  stats server port: 0
+dnn info:
+  - dnn: xxx
+    ip: xx
+    dnnnameiprangestring: ""
+    dnnsnssaiupfipstring: ""
+  - dnn: xxxx
+    ip: xxxx
+    dnnnameiprangestring: ""
+    dnnsnssaiupfipstring: ""
+  - dnn: ""
+    ip: ""
+    dnnnameiprangestring: ""
+    dnnsnssaiupfipstring: ""
+pm:
+  start module count: true
+  start session count: false

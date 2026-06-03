@@ -1,0 +1,97 @@
+package statistics
+
+const (
+	NGSetupRequestCounterKey                  = "NG Setup Request Counter"
+	NGSetupResponseCounterKey                 = "NG Setup Response Counter"
+	NGReSetCounterKey                         = "NG ReSet Counter"
+	InitialUEMessageCounterKey                = "Initial UE Message Counter"
+	InitialContextSetupRequestCounterKey      = "Initial Context Setup Request Counter"
+	InitialContextSetupResponseCounterKey     = "Initial Context Setup Response Counter"
+	UpLinkNASTransportCounterKey              = "UpLink NAS Transport Counter"
+	DownLinkNASTransportCounterKey            = "DownLink NAS Transport Counter"
+	PDUSessionResourceSetupRequestCounterKey  = "PDUSession Resource Setup Request Counter"
+	PDUSessionResourceSetupResponseCounterKey = "PDUSession Resource Setup Response Counter"
+	UEContextReleaseRequestCounterKey         = "UEContext Release Request Counter"
+	UEContextReleaseCommandCounterKey         = "UEContext Release Command Counter"
+	UEContextReleaseCompleteCounterKey        = "UEContext Release Complete Counter"
+	UERadioCapabilityInfoIndicationCounterKey = "UERadio Capability Info Indication Counter"
+	PagingCounterKey                          = "Paging Counter"
+	RegistrationRequestCounterKey             = "Registration Request Counter"
+	RegistrationAcceptCounterKey              = "Registration Accept Counter"
+	RegistrationCompleteCounterKey            = "Registration Complete Counter"
+	RegistrationRejectCounterKey              = "Registration Reject Counter"
+	DeregistrationRequestUeCounterKey         = "De registration Request Ue Counter"
+	DeregistrationAcceptUeCounterKey          = "De registration Accept Ue Counter"
+	ServiceRequestCounterKey                  = "Service Request Counter"
+	ServiceRejectCounterKey                   = "Service Reject Counter"
+	ServiceAcceptCounterKey                   = "Service Accept Counter"
+	ULNasTransportCounterKey                  = "UL Nas Transport Counter"
+	DLNasTransportCounterKey                  = "DL Nas Transport Counter"
+	AuthenticationRequestCounterKey           = "Authentication Request Counter"
+	AuthenticationResponseCounterKey          = "Authentication Response Counter"
+	AuthenticationFailureCounterKey           = "Authentication Failure Counter"
+	AuthenticationRejectCounterKey            = "Authentication Reject Counter"
+	SecurityModeCommandCounterKey             = "Security Mode Command Counter"
+	SecurityModeCompleteCounterKey            = "Security Mode Complete Counter"
+	SecurityModeRejectCounterKey              = "Security Mode Reject Counter"
+	IdentifyRequestCounterKey                 = "Identify Request Counter"
+	IdentifyResponseCounterKey                = "Identify Response Counter"
+	PduSessEstablishRequestCounterKey         = "Pdu Session Establish Request Counter"
+	PduSessEstablishAcceptCounterKey          = "Pdu Session Establish Accept Counter"
+	PduSessEstablishRejectCounterKey          = "Pdu Session Establish Reject Counter"
+	PduSessReleaseRequestCounterKey           = "Pdu Session Release Request"
+	PduSessReleaseCommandCounterKey           = "Pdu Session Release Command"
+	PduSessReleaseCompleteCounterKey          = "Pdu Session Release Complete"
+	OnLineUserCounterKey                      = "online User"
+	OffLineUserCounterKey                     = "offline User"
+	ActiveUserCounterKey                      = "active User"
+	IdleUserCounterKey                        = "Idle User"
+)
+
+const (
+	NGSetupRequestCounterKeyNum              = 4031010
+	NGSetupResponseCounterKeyNum             = 4031011
+	InitialUEMessageCounterKeyNum            = 4031020
+	InitialContextSetupRequestCounterKeyNum  = 4031030
+	InitialContextSetupResponseCounterKeyNum = 4031031
+	UpLinkNASTransportCounterKeyNum          = 4031040
+	DownLinkNASTransportCounterKeyNum        = 4031041
+
+	PDUSessionResourceSetupRequestCounterKeyNum  = 4031050
+	PDUSessionResourceSetupResponseCounterKeyNum = 4031051
+	UEContextReleaseRequestCounterKeyNum         = 4031060
+	UEContextReleaseCommandCounterKeyNum         = 4031061
+	UEContextReleaseCompleteCounterKeyNum        = 4031062
+	UERadioCapabilityInfoIndicationCounterKeyNum = 4031070
+	PagingCounterKeyNum                          = 4031071
+	RegistrationRequestCounterKeyNum             = 4032010
+	RegistrationAcceptCounterKeyNum              = 4032011
+	RegistrationCompleteCounterKeyNum            = 4032012
+	RegistrationRejectCounterKeyNum              = 4032013
+	DeregistrationRequestUeCounterKeyNum         = 4032020
+	DeregistrationAcceptUeCounterKeyNum          = 4032021
+	ServiceRequestCounterKeyNum                  = 4032030
+	ServiceRejectCounterKeyNum                   = 4032031
+	ServiceAcceptCounterKeyNum                   = 4032032
+	ULNasTransportCounterKeyNum                  = 4032040
+	DLNasTransportCounterKeyNum                  = 4032041
+	AuthenticationRequestCounterKeyNum           = 4032050
+	AuthenticationResponseCounterKeyNum          = 4032051
+	AuthenticationFailureCounterKeyNum           = 4032052
+	AuthenticationRejectCounterKeyNum            = 4032053
+	SecurityModeCommandCounterKeyNum             = 4032060
+	SecurityModeCompleteCounterKeyNum            = 4032061
+	SecurityModeRejectCounterKeyNum              = 4032062
+	IdentifyRequestCounterKeyNum                 = 4032070
+	IdentifyResponseCounterKeyNum                = 4032071
+	PduSessEstablishRequestCounterKeyNum         = 4033010
+	PduSessEstablishAcceptCounterKeyNum          = 4033020
+	PduSessEstablishRejectCounterKeyNum          = 4033030
+	PduSessReleaseRequestCounterKeyNum           = 4033040
+	PduSessReleaseCommandCounterKeyNum           = 4033050
+	PduSessReleaseCompleteCounterKeyNum          = 4033060
+	OnLineUserCounterKeyNum                      = 4030010
+	OffLineUserCounterKeyNum                     = 4030020
+	ActiveUserCounterKeyNum                      = 4030030
+	IdleUserCounterKeyNum                        = 4030040
+)

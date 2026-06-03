@@ -1,0 +1,57 @@
+plmnlist:
+- ""
+tailist:
+- ""
+nssai:
+- sst: 0
+  sd:
+  - 0
+  - 0
+  - 0
+dnninfo:
+- dnn: ""
+  dnnip: ""
+  dnnnameiprangestring: ""
+  dnnsnssaiupfipstring: ""
+sbi:
+  amfsbi:
+    addr:
+      ipv4: ""
+      port: 0
+    scheme: ""
+  udmsbi:
+    addr:
+      ipv4: ""
+      port: 0
+    scheme: ""
+  smfsbi:
+    addr:
+      ipv4: ""
+      port: 0
+    scheme: ""
+logger:
+  amflogger:
+    loglevel: ""
+    logpath: ""
+    logfile: false
+    logconsole: false
+  smflogger:
+    loglevel: ""
+    logpath: ""
+    logfile: false
+    logconsole: false
+  udmlogger:
+    loglevel: ""
+    logpath: ""
+    logfile: false
+    logconsole: false
+version:
+  amfv:
+    mainver: ""
+    patchver: ""
+  smfv:
+    mainver: ""
+    patchver: ""
+  udmv:
+    mainver: ""
+    patchver: ""

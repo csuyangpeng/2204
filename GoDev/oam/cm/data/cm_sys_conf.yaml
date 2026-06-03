@@ -1,0 +1,12 @@
+redis server:
+  ip: "192.168.3.5"
+  port: 6379
+db server:
+  drivername: mysql
+  username: 5gc
+  pwd: 123456
+  ip: 10.18.11.51
+  port: 3306
+  dbname: udr_db
+
+

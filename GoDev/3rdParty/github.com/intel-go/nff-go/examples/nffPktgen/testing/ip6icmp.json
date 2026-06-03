@@ -1,0 +1,35 @@
+{
+    "ether": {
+                "saddr": {
+                    "range": {
+                        "min": "00:25:96:FF:FE:12",
+                        "start": "00:30:00:FF:FE:12",
+                        "max": "00:FF:96:FF:FE:12",
+                        "inc": 3
+                    }
+                },
+                "daddr": "00:FF:96:FF:FE:12",
+                "ipv6": {
+                    "icmp": {
+                       "type": 10,
+                       "code": 1,
+                       "seq": "increasing",
+                        "pdist": [
+                            {
+                                "probability": 0.5,
+                                "randbytes":    {
+                                    "size": 50,
+                                    "deviation": 10
+                                }
+                            },
+                            {
+                                "probability": 0.5,
+                                "raw": {
+                                    "data": "0000000000000000000000000000000000"
+                                }
+                            }
+                        ]
+                    }
+                }
+             }
+}

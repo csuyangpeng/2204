@@ -1,0 +1,18 @@
+service:
+  smfinstanceid: ""
+  sscmode: 0
+  sesstype: 0
+rules: []
+n4conf:
+  smfip: ""
+  smfport: 0
+pfcpparameters:
+  pdrs: []
+  bar:
+    dldatanotificationdelay: 0
+    sugbuffpacketscount: 0
+timer:
+  timer3592: 0
+  timer3593: 0
+  timer3590: 0
+  timer3591: 0

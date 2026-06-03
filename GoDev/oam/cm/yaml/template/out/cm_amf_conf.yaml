@@ -1,0 +1,59 @@
+version:
+  main: "0.1"
+  patch: "0"
+logger:
+  level: "debug"
+  path: "."
+  control: false
+n2if:
+  ip: "192.168.3.5"
+  port: 38412
+sctp:
+  init msg:
+    num ostreams: 2
+    max instreams: 2
+    max attempts: 3
+    max init timeout: 3000
+  heatbeat:
+    interval: 5000
+    path max retry: 3
+service:
+  amf name: "5gc"
+  relative amf capacity: 100
+  amf identifier:
+    region id: 5
+    set id: 2
+    pointer: 1
+nas:
+  security enabled: true
+  encrypt algorithm: "NEA0"
+  integrity algorithm: "NIA0,NIA2"
+  t3512 min: 54
+  t3513 sec: 6
+  t3502 min: 12
+  t3550 sec: 6
+  t3560 sec: 6
+  t3570 sec: 6
+  t3522 sec: 6
+  t3555 sec: 6
+  t3565 sec: 6
+  tics sec: 2
+plmnlist: []
+tailists: []
+nssai: []
+sbi:
+  amf:
+    addr:
+      ip: "192.168.3.5"
+      port: 29518
+    scheme: "http"
+  udm:
+    addr:
+      ip: "192.168.3.5"
+      port: 29503
+    scheme: "http"
+  smf:
+    addr:
+      ip: "192.168.3.5"
+      port: 29502
+    scheme: "http"

@@ -12,8 +12,10 @@ TAGS=latest
 # docker tag kamailio:${TAGS} ${ALIREPOSITORY}/kamailio:${TAGS}
 # docker push ${ALIREPOSITORY}/kamailio:${TAGS}
 
-docker buildx build --progress=plain --platform linux/amd64,linux/arm64 \
+docker buildx build --progress=plain --platform linux/amd64 \
     -f Dockerfile -t ${ALIREPOSITORY}/kamailio:${TAGS} --push .
+# docker buildx build --progress=plain --platform linux/amd64,linux/arm64 \
+#     -f Dockerfile -t ${ALIREPOSITORY}/kamailio:${TAGS} --push .
 
 # # Build docker images for kamailio IMS components
 # cd ../ims_base

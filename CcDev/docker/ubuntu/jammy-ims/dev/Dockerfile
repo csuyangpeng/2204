@@ -98,6 +98,7 @@ RUN wget https://www.etsi.org/deliver/etsi_ts/126400_126499/126443/17.00.00_60/t
 
 ENV GITUSER= GITPASS= 
 ENV http_proxy= https_proxy=
-
+ENV GOPROXY="http://10.18.1.2:8081,https://goproxy.cn,direct" \
+    GOSUMDB="sum.golang.org http://10.18.1.2:8081/sumdb/sum.golang.org" \
 # COPY kamailio_init.sh /
 # CMD /kamailio_init.sh

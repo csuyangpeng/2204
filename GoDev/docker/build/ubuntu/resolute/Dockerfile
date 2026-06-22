@@ -1,6 +1,6 @@
 FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/ubuntu:26.04
 
-ARG MAKEFLAGS=-j TARGETARCH
+ARG TARGETARCH
 ENV GOROOT=/opt/go
 ENV GOPATH=/home/sder/go
 ENV GO111MODULE=on

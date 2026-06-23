@@ -3,7 +3,7 @@ FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/ubuntu:26.04
 ARG MAKEFLAGS=-j
 ENV GITUSER=peng.yang GITPASS=11asdASD
 ENV GIT_PROXY=http://10.18.11.52:7890
-ENV LD_LIBRARY_PATH=/usr/local/lib:${LD_LIBRARY_PATH:-}
+ENV LD_LIBRARY_PATH=/usr/local/lib
 
 COPY internal/preinstall.sh /tmp/internal/preinstall.sh
 RUN bash /tmp/internal/preinstall.sh

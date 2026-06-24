@@ -24,7 +24,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/cc:dev-22.04
+FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/cc:dev-26.04
 
 ARG MAKEFLAGS=-j TARGETARCH
 ENV GOROOT=/opt/go
@@ -38,7 +38,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Install updates and dependencies
 RUN apt-get update && \
-	apt-get -y install git unzip tcpdump screen tmux gperf ntp ntpdate git-core dkms \
+	apt-get -y install wget git unzip tcpdump screen tmux gperf ntpsec ntpsec-ntpdate git-core dkms \
   gcc flex bison libmysqlclient-dev make libssl-dev libcurl4-openssl-dev \
 	libxml2-dev libpcre2-dev bash-completion g++ autoconf libmnl-dev \
 	libsctp-dev libradcli-dev libradcli4 libjson-c-dev pkg-config iproute2 net-tools \
@@ -53,24 +53,25 @@ RUN apt-get update && \
   git vim tmux dpkg-dev debhelper libxtables-dev default-libmysqlclient-dev gperf libavcodec-dev libavfilter-dev libavformat-dev \
   libavutil-dev libbencode-perl libcrypt-openssl-rsa-perl libcrypt-rijndael-perl libdigest-crc-perl libdigest-hmac-perl \
   libevent-dev libhiredis-dev libio-multiplex-perl libio-socket-inet6-perl libiptc-dev libjson-glib-dev libnet-interface-perl \
-  libpcap0.8-dev libpcre3-dev libsocket6-perl libspandsp-dev libssl-dev libswresample-dev libsystemd-dev libxmlrpc-core-c3-dev \
+  libpcap0.8-dev libsocket6-perl libspandsp-dev libssl-dev libswresample-dev libsystemd-dev libxmlrpc-core-c3-dev \
   markdown dkms module-assistant keyutils libnfsidmap1 nfs-common rpcbind libglib2.0-dev zlib1g-dev libavcodec-extra \
-  libcurl4-openssl-dev netcat-openbsd netcat iptables libxtables12 iproute2 net-tools iputils-ping libconfig-tiny-perl libwebsockets-dev \
+  libcurl4-openssl-dev netcat-openbsd iptables libxtables12 iproute2 net-tools iputils-ping libconfig-tiny-perl libwebsockets-dev \
   libopus-dev libnftnl-dev pandoc liblua5.1-0-dev libmicrohttpd-dev \
   clang llvm libbpf-dev libelf-dev linux-libc-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
-  # netcat libnfsidmap2
+# libpcre3-dev：26.04 无此包，从 jammy 安装
+
+COPY internal/install_libpcre3_jammy.sh /tmp/internal/
+RUN bash /tmp/internal/install_libpcre3_jammy.sh
 
 COPY internal /tmp/internal
 RUN /tmp/internal/install_golang.sh
 
 # Install rtpengine
-# dpkg-checkbuilddeps && dpkg-buildpackage -b -uc -us
 ENV http_proxy= https_proxy=
-RUN git clone http://${GITUSER}:${GITPASS}@10.18.1.2:9999/develop/ims.git && \
-	cd ims && git checkout cc_yp && cd rtpengine && dpkg-checkbuilddeps && \
-	dpkg-buildpackage -b -uc -us && cd .. && \
-	dpkg -i *.deb && ldconfig && cd .. && rm ims -rf
+COPY internal/build_rtpengine.sh /tmp/internal/
+COPY internal/patches/ /tmp/internal/patches/
+RUN bash /tmp/internal/build_rtpengine.sh
 
 ENV http_proxy=http://10.18.11.52:7890 https_proxy=http://10.18.11.52:7890
 RUN wget https://www.etsi.org/deliver/etsi_ts/126400_126499/126443/17.00.00_60/ts_126443v170000p0.zip && \
@@ -99,6 +100,6 @@ RUN wget https://www.etsi.org/deliver/etsi_ts/126400_126499/126443/17.00.00_60/t
 ENV GITUSER= GITPASS= 
 ENV http_proxy= https_proxy=
 ENV GOPROXY="http://10.18.1.2:8081,https://goproxy.cn,direct" \
-    GOSUMDB="sum.golang.org http://10.18.1.2:8081/sumdb/sum.golang.org" \
+    GOSUMDB="sum.golang.org http://10.18.1.2:8081/sumdb/sum.golang.org"
 # COPY kamailio_init.sh /
 # CMD /kamailio_init.sh

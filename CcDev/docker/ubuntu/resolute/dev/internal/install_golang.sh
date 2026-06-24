@@ -14,6 +14,20 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 mkdir -p ${GOPATH} && mkdir -p ${GOPATH}/bin && mkdir -p ${GOPATH}/src
 
 VER="1.26.4"
-echo "https://go.dev/dl/go${VER}.linux-${TARGETARCH}.tar.gz"
+if [ -n "${TARGETARCH:-}" ]; then
+  go_arch="${TARGETARCH}"
+else
+  case "$(uname -m)" in
+    x86_64) go_arch=amd64 ;;
+    aarch64|arm64) go_arch=arm64 ;;
+    armv7l) go_arch=armv6l ;;
+    *)
+      echo "unsupported architecture: $(uname -m)" >&2
+      exit 1
+      ;;
+  esac
+fi
 
-cd /opt && curl -L -s https://go.dev/dl/go${VER}.linux-${TARGETARCH}.tar.gz | tar zx
+go_url="https://go.dev/dl/go${VER}.linux-${go_arch}.tar.gz"
+echo "${go_url}"
+cd /opt && curl -fL "${go_url}" | tar zx

@@ -26,7 +26,6 @@
 
 FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/cc:dev-26.04
 
-ARG MAKEFLAGS=-j TARGETARCH
 ENV GOROOT=/opt/go
 ENV GOPATH=/home/sder/go
 ENV GO111MODULE=on
@@ -35,42 +34,47 @@ ENV GITUSER=peng.yang GITPASS=11asdASD
 # ENV http_proxy="http://10.18.11.52:7890" https_proxy="http://10.18.11.52:7890"
 ENV PATH=${GOROOT}/bin:${GOPATH}/bin:${PATH}
 ENV DEBIAN_FRONTEND=noninteractive
+# rtpengine 9.4.1 使用自编译 FFmpeg 4.4.2（与 22.04 一致），不用 26.04 系统 FFmpeg 8
+ENV FFMPEG_PREFIX=/usr/local/ffmpeg-4.4.2
+ENV PKG_CONFIG_PATH=/usr/local/ffmpeg-4.4.2/lib/pkgconfig
+ENV LD_LIBRARY_PATH=/usr/local/ffmpeg-4.4.2/lib
+ENV PATH=/usr/local/ffmpeg-4.4.2/bin:${PATH}
 
-# Install updates and dependencies
+# Install updates and dependencies（不装系统 libav*-dev，避免与 FFmpeg 4.4 头文件冲突）
 RUN apt-get update && \
 	apt-get -y install wget git unzip tcpdump screen tmux gperf ntpsec ntpsec-ntpdate git-core dkms \
-  gcc flex bison libmysqlclient-dev make libssl-dev libcurl4-openssl-dev \
+  gcc flex bison libmysqlclient-dev make libssl-dev libcurl4-openssl-dev bzip2 \
 	libxml2-dev libpcre2-dev bash-completion g++ autoconf libmnl-dev \
 	libsctp-dev libradcli-dev libradcli4 libjson-c-dev pkg-config iproute2 net-tools \
 	iputils-ping libgcrypt20-dev libxmlrpc-core-c3-dev libjson-glib-dev libwebsockets-dev \
-  libiptc-dev libavcodec-dev libavformat-dev libavutil-dev libswresample-dev \
-  libspandsp-dev libhiredis-dev libbcg729-0 debhelper-compat module-assistant \
+  libiptc-dev libspandsp-dev libhiredis-dev libbcg729-0 debhelper-compat module-assistant \
   nfs-common libbencode-perl libconfig-tiny-perl libcrypt-rijndael-perl \
   libio-socket-inet6-perl libsocket6-perl netcat-openbsd libbcg729-dev markdown \
   libcrypt-openssl-rsa-perl libdigest-crc-perl libio-multiplex-perl libnet-interface-perl \
-  libsystemd-dev libxtables-dev markdown libavfilter-dev libdigest-hmac-perl \
-   \
-  git vim tmux dpkg-dev debhelper libxtables-dev default-libmysqlclient-dev gperf libavcodec-dev libavfilter-dev libavformat-dev \
-  libavutil-dev libbencode-perl libcrypt-openssl-rsa-perl libcrypt-rijndael-perl libdigest-crc-perl libdigest-hmac-perl \
+  libsystemd-dev libxtables-dev markdown libdigest-hmac-perl \
+  git vim tmux dpkg-dev debhelper libxtables-dev default-libmysqlclient-dev gperf \
   libevent-dev libhiredis-dev libio-multiplex-perl libio-socket-inet6-perl libiptc-dev libjson-glib-dev libnet-interface-perl \
-  libpcap0.8-dev libsocket6-perl libspandsp-dev libssl-dev libswresample-dev libsystemd-dev libxmlrpc-core-c3-dev \
-  markdown dkms module-assistant keyutils libnfsidmap1 nfs-common rpcbind libglib2.0-dev zlib1g-dev libavcodec-extra \
+  libpcap0.8-dev libsocket6-perl libspandsp-dev libssl-dev libsystemd-dev libxmlrpc-core-c3-dev \
+  dkms module-assistant keyutils libnfsidmap1 nfs-common rpcbind libglib2.0-dev zlib1g-dev \
   libcurl4-openssl-dev netcat-openbsd iptables libxtables12 iproute2 net-tools iputils-ping libconfig-tiny-perl libwebsockets-dev \
-  libopus-dev libnftnl-dev pandoc liblua5.1-0-dev libmicrohttpd-dev \
+  libopus-dev libnftnl-dev pandoc liblua5.1-0-dev libmicrohttpd-dev lsb-release \
   clang llvm libbpf-dev libelf-dev linux-libc-dev \
   && apt-get clean && rm -rf /var/lib/apt/lists/*
 # libpcre3-dev：26.04 无此包，从 jammy 安装
 
+COPY internal/install_ffmpeg442.sh /tmp/internal/
+RUN bash /tmp/internal/install_ffmpeg442.sh
+
 COPY internal/install_libpcre3_jammy.sh /tmp/internal/
 RUN bash /tmp/internal/install_libpcre3_jammy.sh
 
-COPY internal /tmp/internal
+COPY internal/install_golang.sh /tmp/internal/
 RUN /tmp/internal/install_golang.sh
 
+COPY internal /tmp/internal
 # Install rtpengine
 ENV http_proxy= https_proxy=
 COPY internal/build_rtpengine.sh /tmp/internal/
-COPY internal/patches/ /tmp/internal/patches/
 RUN bash /tmp/internal/build_rtpengine.sh
 
 ENV http_proxy=http://10.18.11.52:7890 https_proxy=http://10.18.11.52:7890

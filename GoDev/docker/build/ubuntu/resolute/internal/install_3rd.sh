@@ -4,14 +4,21 @@ set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-wget https://github.com/ntop/nDPI/archive/refs/tags/4.8.tar.gz
-tar -xf 4.8.tar.gz
-pushd nDPI-4.8
+version=4.8
+wget https://github.com/ntop/nDPI/archive/refs/tags/${version}.tar.gz
+tar -xf ${version}.tar.gz
+pushd nDPI-${version}
 ./autogen.sh
-# Dockerfile 中 MAKEFLAGS=-j 会无限制并行，buildx 下易触发 gcc 段错误
 unset MAKEFLAGS
-make -j2
+if [ "$(uname -m)" = "aarch64" ]; then
+    export CFLAGS="-O0 -g"
+    export CXXFLAGS="-O0 -g"
+    jobs=1
+else
+    jobs="$(nproc)"
+fi
+make -j"${jobs}"
 make install
 popd
 
-rm 4.8.tar.gz nDPI-4.8 -rf
+rm ${version}.tar.gz nDPI-${version} -rf

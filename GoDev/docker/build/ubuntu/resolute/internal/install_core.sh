@@ -4,6 +4,7 @@
 set -e
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
+source "$(dirname "${BASH_SOURCE[0]}")/git_env.sh"
 
 git clone http://${GITUSER}:${GITPASS}@10.18.1.2:9999/develop/lite5gc.git 
 pushd lite5gc

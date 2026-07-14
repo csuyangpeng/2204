@@ -1,0 +1,3 @@
+# GitLab Personal Access Token（read_repository scope）
+# 用法: cp .gitpass.example .gitpass  然后将下面占位符换成你的 token（只保留一行）
+YOUR_GITLAB_TOKEN_HERE

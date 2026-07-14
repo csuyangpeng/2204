@@ -8,15 +8,17 @@ ENV GOPATH=/home/sder/go
 ENV http_proxy="http://10.18.11.52:7890" https_proxy="http://10.18.11.52:7890" \
     no_proxy="mirrors.aliyun.com,10.18.1.2,registry.cn-hangzhou.aliyuncs.com,goproxy.cn"
 
-COPY internal /tmp/internal
-
-# 拆成多个 RUN，失败时只重跑失败层及之后（apt/golang/nDPI 可命中缓存）
+# 拆开 COPY，只复制当前 RUN 需要的文件，改 nDPI 脚本时前面的层能命中缓存
+COPY internal/preinstall.sh internal/install_golang.sh internal/sources.list /tmp/internal/
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     bash /tmp/internal/preinstall.sh && bash /tmp/internal/install_golang.sh
 
+# install_3rd 最常迭代；上面 apt/golang 层缓存住，改这里不会重跑
+COPY internal/install_3rd.sh /tmp/internal/
 RUN bash /tmp/internal/install_3rd.sh
 
+COPY internal/install_tcpdump.sh internal/git_env.sh /tmp/internal/
 RUN --mount=type=secret,id=gitpass \
     bash /tmp/internal/install_tcpdump.sh
 

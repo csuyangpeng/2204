@@ -26,6 +26,8 @@
 
 FROM registry.cn-hangzhou.aliyuncs.com/10_18_1_2_5000/kamailio:dev-26.04-20260624
 
+ARG TARGETARCH
+ENV TARGETARCH=${TARGETARCH}
 ENV DEBIAN_FRONTEND=noninteractive
 
 ENV PIP_DEFAULT_TIMEOUT=100
@@ -37,65 +39,36 @@ ENV http_proxy=http://10.18.11.52:7890 https_proxy=http://10.18.11.52:7890 \
 
 COPY internal /tmp/internal
 
-# Install updates and dependencies
-RUN bash /tmp/internal/prepare_apt.sh && \
-	apt-get -y install mysql-server tcpdump screen tmux ntpsec ntpsec-ntpdate git-core dkms \
-					flex bison libmysqlclient-dev make libssl-dev libcurl4-openssl-dev \
-					libxml2-dev libpcre2-dev libpcre3-dev bash-completion g++-11 autoconf libmnl-dev \
-					libsctp-dev libradcli-dev libradcli4 libjson-c-dev pkg-config iproute2 net-tools \
-					iputils-ping libgcrypt20-dev libjansson-dev libevent-dev libnghttp2-dev \
-					systemctl rsyslog gdb logrotate lua5.1 lua5.1-0-dev
+# ---- 系统包（合并为一个 RUN + apt cache mount，避免 arm64 QEMU 下重复 update） ----
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    bash /tmp/internal/prepare_apt.sh && \
+    apt-get -y install mysql-server tcpdump screen tmux ntpsec ntpsec-ntpdate git-core dkms \
+        flex bison libmysqlclient-dev make libssl-dev libcurl4-openssl-dev \
+        libxml2-dev libpcre2-dev bash-completion g++ autoconf libmnl-dev \
+        libsctp-dev libradcli-dev libradcli4 libjson-c-dev pkg-config iproute2 net-tools \
+        iputils-ping libgcrypt20-dev libjansson-dev libevent-dev libnghttp2-dev \
+        systemctl rsyslog gdb logrotate lua5.1 lua5.1-0-dev \
+        build-essential luarocks libmicrohttpd-dev \
+        python3 python3-pip python3-requests python3-yaml python3-setuptools python3-wheel \
+        supervisor && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-
-# Install luarocks, lua-cjson, Python and Supervisor
-# Optimize space usage by cleaning up after each step
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get install -y --no-install-recommends build-essential lua5.1 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get install -y --no-install-recommends luarocks && \
-    luarocks install lua-cjson && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get install -y --no-install-recommends libmicrohttpd-dev && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install Python and required Python packages
-# Use system packages when possible to avoid network issues
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get install -y --no-install-recommends \
-        python3 \
-        python3-pip \
-        python3-requests \
-        python3-yaml \
-        python3-setuptools \
-        python3-wheel && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
+# ---- Python / Lua 包安装 ----
 # mysql-connector-python（configparser 为 Python3 标准库，无需 pip 安装）
 RUN pip3 install --no-cache-dir --index-url https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --timeout 60 mysql-connector-python
 
-# Install supervisor
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get install -y --no-install-recommends supervisor && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Install etcd3-py
+# etcd3 + protobuf（etcd3 需要 protobuf<4）
 RUN pip3 install --no-cache-dir --index-url https://mirrors.aliyun.com/pypi/simple/ --trusted-host mirrors.aliyun.com --timeout 180 etcd3 && \
     pip3 install --no-cache-dir protobuf==3.19.6
 
 RUN pip3 install redis
 
-# Create necessary directories
+# Lua cjson
+RUN luarocks install lua-cjson
+
+# ---- 目录与配置 ----
 RUN mkdir -p /var/log /var/run/supervisor /coredumps
-# 复制并设置初始化脚本
 
 RUN mkdir -p /root/.pip && \
     echo "[global]" > /root/.pip/pip.conf && \
@@ -103,23 +76,16 @@ RUN mkdir -p /root/.pip && \
     echo "trusted-host = pypi.tuna.tsinghua.edu.cn" >> /root/.pip/pip.conf && \
     echo "verify = false" >> /root/.pip/pip.conf
 
-# 安装系统依赖
-RUN bash /tmp/internal/prepare_apt.sh && \
-    apt-get -y install \
-        bind9 \
-        ca-certificates && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
+# bind9 + 清理
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,target=/var/lib/apt,sharing=locked \
+    bash /tmp/internal/prepare_apt.sh && \
+    apt-get -y install bind9 ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/internal
 
 ENV http_proxy= https_proxy=
+
 # 创建必要的目录并设置权限
 RUN mkdir -p /var/log/supervisor /var/run/named /var/cache/bind /etc/bind && \
     chown -R bind:bind /var/cache/bind /etc/bind /var/run/named
-
-# 复制配置文件
-#COPY requirements.txt /tmp/
-
-# 安装Python依赖
-#RUN pip3 install --no-cache-dir --trusted-host pypi.tuna.tsinghua.edu.cn -r /tmp/requirements.txt && \
-#   rm -f /tmp/requirements.txt

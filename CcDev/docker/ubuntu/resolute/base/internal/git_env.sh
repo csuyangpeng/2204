@@ -1,9 +1,14 @@
 #!/usr/bin/env bash
-# 经 HTTP 代理访问 GitHub：HTTP/2 易 framing 错误；慢链路/ QEMU arm64 易 TLS 断流、early EOF
-export http_proxy="${http_proxy:-http://10.18.11.52:7890}"
-export https_proxy="${https_proxy:-http://10.18.11.52:7890}"
-git config --global http.version HTTP/1.1
-git config --global http.postBuffer 524288000
-git config --global http.lowSpeedLimit 0
-git config --global http.lowSpeedTime 999999
-git config --global http.sslVerify false
+# 从 BuildKit secret 读取 GitLab token，避免写入 Dockerfile/镜像层
+export GITUSER="${GITUSER:-peng.yang}"
+
+if [ -r /run/secrets/gitpass ]; then
+    GITPASS="$(grep -v '^[[:space:]]*#' /run/secrets/gitpass | grep -v '^[[:space:]]*$' | tail -1 | tr -d '[:space:]')"
+    export GITPASS
+elif [ -n "${GITPASS:-}" ]; then
+    export GITPASS
+else
+    echo "ERROR: Git token missing. Build with:" >&2
+    echo "  docker build --secret id=gitpass,src=.gitpass ..." >&2
+    exit 1
+fi

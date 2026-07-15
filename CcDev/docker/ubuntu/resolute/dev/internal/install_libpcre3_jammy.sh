@@ -4,7 +4,7 @@ set -euo pipefail
 
 ARCH="$(dpkg --print-architecture)"
 PCRE_VER="8.39-13ubuntu0.22.04.1"
-
+echo "========================: $ARCH"
 case "$ARCH" in
   amd64|i386)
     BASE="http://archive.ubuntu.com/ubuntu/pool/main/p/pcre3"

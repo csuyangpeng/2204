@@ -33,11 +33,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV PIP_DEFAULT_TIMEOUT=100
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 ENV PIP_BREAK_SYSTEM_PACKAGES=1
-ENV PYTHONWARNINGS="ignore:Unverified HTTPS request"
+# ignore::SyntaxWarning: 26.04 Python systemctl wrapper 的 \w 非法转义 bug
+ENV PYTHONWARNINGS="ignore:Unverified HTTPS request,ignore::SyntaxWarning"
 ENV http_proxy=http://10.18.11.52:7890 https_proxy=http://10.18.11.52:7890 \
     no_proxy=mirrors.aliyun.com,registry.cn-hangzhou.aliyuncs.com,10.18.1.2,pypi.tuna.tsinghua.edu.cn
 
 COPY internal /tmp/internal
+
+# 阻止 apt 安装包时尝试启动服务（Docker 无 systemd）
+RUN echo 'exit 101' > /usr/sbin/policy-rc.d && chmod +x /usr/sbin/policy-rc.d
 
 # ---- 系统包（合并为一个 RUN + apt cache mount，避免 arm64 QEMU 下重复 update） ----
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
@@ -52,7 +56,22 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
         build-essential luarocks libmicrohttpd-dev \
         python3 python3-pip python3-requests python3-yaml python3-setuptools python3-wheel \
         supervisor && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
+    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    # 修复 systemctl：1) \w 非法转义加 raw string  2) start/stop/restart 转调 service \
+    sed -i 's/re\.sub("\[\$]/re.sub(r"[\$]/g' /usr/bin/systemctl && \
+    mv /usr/bin/systemctl /usr/bin/systemctl.py && \
+    printf '%s\n' \
+        '#!/bin/bash' \
+        '# systemctl wrapper: Docker 无 systemd，start/stop/restart 转调 service' \
+        'case "$1" in' \
+        '  restart|start|stop|reload|try-restart|force-reload)' \
+        '    [ -n "$2" ] && service "$2" "$1" 2>/dev/null || true ;;' \
+        '  status)' \
+        '    [ -n "$2" ] && { service "$2" status 2>/dev/null || exec /usr/bin/systemctl.py "$@"; } ;;' \
+        '  *)  exec /usr/bin/systemctl.py "$@" ;;' \
+        'esac' \
+        > /usr/bin/systemctl && \
+    chmod +x /usr/bin/systemctl
 
 # ---- Python / Lua 包安装 ----
 # mysql-connector-python（configparser 为 Python3 标准库，无需 pip 安装）
